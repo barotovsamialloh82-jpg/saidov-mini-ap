@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#06152c">
+<title>SAIDOV MINI APP</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #087cff;
+    --green: #08c768;
+    --bg: #031024;
+    --card: #071a33;
+    --text: #ffffff;
+}
+
+body {
+    background: radial-gradient(ellipse at top, #092c5c, #031024 65%);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    padding-bottom: 100px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 18px;
+    background: #041127;
+    border-bottom: 1px solid #164577;
+    gap: 12px;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #087cff, #00d9ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.brand {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.subtitle {
+    color: #8bbcff;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.header-right {
+    margin-left: auto;
+    color: #45aaff;
+    font-size: 12px;
+    text-align: right;
+}
+
+.container {
+    padding: 14px;
+}
+
+.banner {
+    min-height: 145px;
+    padding: 24px 18px;
+    border-radius: 23px;
+    border: 1px solid #1468b8;
+    background: linear-gradient(120deg, #06172f, #0755a8, #07152d);
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner h1 {
+    font-size: 29px;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.banner p {
+    color: #c4dcff;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.banner-icon {
+    position: absolute;
+    right: 14px;
+    top: 23px;
+    font-size: 70px;
+    opacity: .65;
+}
+
+.card {
+    background: linear-gradient(145deg, #071b36, #041126);
+    border: 1px solid #104b80;
+    border-radius: 23px;
+    padding: 14px;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 4px 0 14px;
+    line-height: 1.5;
+}
+
+.profile-btn {
+    width: 100%;
+    padding: 17px;
+    border-radius: 16px;
+    border: 1px solid #14ed80;
+    background: linear-gradient(#0bce68, #008e4b);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+.menu-btn {
+    min-height: 65px;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid #0879e7;
+    background: linear-gradient(#087cf4, #0751bc);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    font-size: 13px;
+    font-weight: bold;
+    gap: 5px;
+}
+
+.menu-btn:active,
+.profile-btn:active {
+    transform: scale(.97);
+}
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.icon {
+    font-size: 23px;
+}
+
+.arrow {
+    font-size: 24px;
+    color: #d3eaff;
+}
+
+.welcome {
+    padding: 17px;
+}
+
+.welcome-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 1.4;
+    margin-bottom: 14px;
+}
+
+.gift {
+    min-width: 48px;
+    height: 48px;
+    background: #075bc9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.welcome p {
+    color: #d0e2ff;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 11px 4px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(3, 17, 37, .97);
+    border-top: 1px solid #164577;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    z-index: 10;
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    color: #8daed8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    padding: 4px 0;
+}
+
+.nav-icon {
+    font-size: 23px;
+}
+
+.nav-btn.active {
+    color: #16a0ff;
+}
+
+.toast {
+    display: none;
+    position: fixed;
+    z-index: 20;
+    bottom: 95px;
+    left: 16px;
+    right: 16px;
+    background: #082449;
+    border: 1px solid #168cff;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media (min-width: 600px) {
+    body {
+        max-width: 560px;
+        margin: auto;
+    }
+
+    .bottom-nav {
+        max-width: 560px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">S</div>
+
+    <div>
+        <div class="brand">SAIDOV</div>
+        <div class="subtitle">Telegram Mini App</div>
+    </div>
+
+    <div class="header-right">
+        ✈ TELEGRAM<br>
+        MINI APP
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="banner">
+        <h1>FREE FIRE</h1>
+        <p>Лучшие товары<br>для твоей игры!</p>
+        <div class="banner-icon">🎮</div>
+    </section>
+
+    <section class="card">
+
+        <div class="section-title">
+            👤 Выбирай нужный раздел ниже:
+        </div>
+
+        <button class="profile-btn" onclick="openPage('Профиль')">
+            👤 Профиль
+        </button>
+
+        <div class="grid">
+
+            <button class="menu-btn" onclick="openPage('Товары Free Fire')">
+                <span class="menu-left">
+                    <span class="icon">🎮</span>
+                    <span>Товары Free Fire</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Товары Telegram')">
+                <span class="menu-left">
+                    <span class="icon">✈️</span>
+                    <span>Товары Telegram</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Топ 10')">
+                <span class="menu-left">
+                    <span class="icon">🏆</span>
+                    <span>Топ 10</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Софт')">
+                <span class="menu-left">
+                    <span class="icon">👑</span>
+                    <span>Софт</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Наш чат')">
+                <span class="menu-left">
+                    <span class="icon">🔴</span>
+                    <span>Наш чат</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Поддержка')">
+                <span class="menu-left">
+                    <span class="icon">☎️</span>
+                    <span>Поддержка</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+        </div>
+    </section>
+
+    <section class="card welcome">
+
+        <div class="welcome-title">
+            <div class="gift">🎁</div>
+            <div>❤️ Добро пожаловать в магазин SAIDOV! 🛒</div>
+        </div>
+
+        <p>
+            Здесь ты найдёшь лучшие товары для Free Fire
+            и Telegram по самым сочным ценам!
+        </p>
+
+        <p>
+            Приглашай друзей и зарабатывай на бесплатные призы!
+        </p>
+
+        <p>Выбирай нужный раздел ниже:</p>
+
+        <button class="profile-btn" onclick="openPage('Профиль')">
+            👤 Профиль
+        </button>
+
+        <div class="grid">
+
+            <button class="menu-btn" onclick="openPage('Товары Free Fire')">
+                <span class="menu-left">
+                    <span class="icon">🎮</span>
+                    <span>Товары Free Fire</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Товары Telegram')">
+                <span class="menu-left">
+                    <span class="icon">✈️</span>
+                    <span>Товары Telegram</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Топ 10')">
+                <span class="menu-left">
+                    <span class="icon">🏆</span>
+                    <span>Топ 10</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Софт')">
+                <span class="menu-left">
+                    <span class="icon">👑</span>
+                    <span>Софт</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Наш чат')">
+                <span class="menu-left">
+                    <span class="icon">🔴</span>
+                    <span>Наш чат</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="menu-btn" onclick="openPage('Поддержка')">
+                <span class="menu-left">
+                    <span class="icon">☎️</span>
+                    <span>Поддержка</span>
+                </span>
+                <span class="arrow">›</span>
+            </button>
+
+        </div>
+    </section>
+
+</main>
+
+<nav class="bottom-nav">
+
+    <button class="nav-btn active" onclick="openPage('Главная', this)">
+        <span class="nav-icon">⌂</span>
+        <span>Главная</span>
+    </button>
+
+    <button class="nav-btn" onclick="openPage('Товары', this)">
+        <span class="nav-icon">▱</span>
+        <span>Товары</span>
+    </button>
+
+    <button class="nav-btn" onclick="openPage('Баланс', this)">
+        <span class="nav-icon">💳</span>
+        <span>Баланс</span>
+    </button>
+
+    <button class="nav-btn" onclick="openPage('Заказы', this)">
+        <span class="nav-icon">🛒</span>
+        <span>Заказы</span>
+    </button>
+
+    <button class="nav-btn" onclick="openPage('Профиль', this)">
+        <span class="nav-icon">♙</span>
+        <span>Профиль</span>
+    </button>
+
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const tg = window.Telegram && window.Telegram.WebApp;
+
+if (tg) {
+    tg.ready();
+    tg.expand();
+
+    try {
+        tg.setHeaderColor('#041127');
+        tg.setBackgroundColor('#031024');
+    } catch (e) {}
+}
+
+let toastTimer;
+
+function openPage(page, button) {
+    if (tg && tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(function(item) {
+        item.classList.remove('active');
+    });
+
+    if (button) {
+        button.classList.add('active');
+    } else {
+        document.querySelectorAll('.nav-btn').forEach(function(item) {
+            if (item.innerText.includes(page)) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    const toast = document.getElementById('toast');
+
+    toast.textContent = page + ' — раздел будет подключён к боту.';
+    toast.style.display = 'block';
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function() {
+        toast.style.display = 'none';
+    }, 2500);
+}
+</script>
+
+</body>
+</html>
